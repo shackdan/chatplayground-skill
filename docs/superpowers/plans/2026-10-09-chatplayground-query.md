@@ -1,5 +1,15 @@
 # ChatPlayground Query Skill Implementation Plan
 
+> **Status: implemented and verified against the live site (2026-10-09).**
+> This plan is kept as a historical record of what was attempted, task by
+> task — it is **not** a current reference. Live inspection during
+> implementation overturned two of its core assumptions (a single-screen
+> login form, and URL-addressable conversations for `threads.json`), so
+> several tasks' code blocks below no longer match what shipped. For
+> accurate as-built behavior, selectors, and rationale, see **§9 of the
+> spec** (`docs/superpowers/specs/2026-10-09-chatplayground-query-design.md`),
+> not this file.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a Claude Code skill that queries ChatPlayground (web.chatplayground.ai) via a single Bash call per question, returning only the reply text, with login handled entirely out-of-band so credentials never enter Claude's context.
