@@ -17,14 +17,14 @@ def run_login(username: str, password: str) -> dict:
         page.goto(BASE_URL)
 
         page.fill(SELECTORS["login_email_input"], username)
-        page.click(SELECTORS["login_submit_button"])
+        page.click(SELECTORS["login_submit_button"], timeout=STAGE_TRANSITION_TIMEOUT_MS)
 
         # Clerk advances to the password sub-step in place, signaled by a
         # URL hash change (observed as #/create or #/factor-one) rather
         # than a full page navigation.
         page.wait_for_url(re.compile(r"#/"), timeout=STAGE_TRANSITION_TIMEOUT_MS)
         page.fill(SELECTORS["login_password_input"], password)
-        page.click(SELECTORS["login_submit_button"])
+        page.click(SELECTORS["login_submit_button"], timeout=STAGE_TRANSITION_TIMEOUT_MS)
 
         try:
             page.wait_for_function(

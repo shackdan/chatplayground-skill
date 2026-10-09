@@ -8,10 +8,15 @@ SELECTORS = {
     # into sign-in once the email is recognized.
     "login_email_input": 'input[name="identifier"], input[name="emailAddress"]',
     "login_password_input": 'input[name="password"]',
-    # Exact text match avoids ambiguity with the "Continue with Google"
-    # button, which also contains the substring "Continue". The same
-    # selector is used for both the email step and the password step —
-    # Clerk re-renders the same button with the same exact label at each
-    # stage of the form.
-    "login_submit_button": 'button:text-is("Continue")',
+    # Role-based (accessible name) match, not a CSS text selector: the
+    # button wraps its label in a child <span>, which makes Playwright's
+    # `:text-is()` match the span instead of the button (it prefers the
+    # smallest element with the exact text), so `button:text-is("Continue")`
+    # never matches the button itself and page.click() hangs until timeout.
+    # The role engine's accessible-name match targets the button correctly
+    # and, unlike a plain text selector, does exact (not substring) name
+    # matching by default — so it doesn't also match "Continue with
+    # Google". The same selector is used for both the email step and the
+    # password step; Clerk re-renders the same button at each stage.
+    "login_submit_button": 'role=button[name="Continue"]',
 }
