@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import Callable, Optional
 
-from . import state
+from . import onepassword, state
 from .browser import run_login as default_run_login
 
 DEFAULT_STATE_DIR = Path(__file__).resolve().parent.parent.parent / "state"
@@ -23,12 +23,22 @@ def main(
     state_dir: Optional[Path] = None,
     username: Optional[str] = None,
     password: Optional[str] = None,
+    get_1password_credentials: Callable[[], Optional[tuple]] = onepassword.get_credentials,
 ) -> int:
     build_arg_parser().parse_args(argv)
     sdir = state_dir if state_dir is not None else DEFAULT_STATE_DIR
 
-    user = username if username is not None else input("ChatPlayground email: ")
-    pw = password if password is not None else getpass.getpass("ChatPlayground password: ")
+    user, pw = username, password
+    if user is None and pw is None:
+        creds = get_1password_credentials()
+        if creds is not None:
+            user, pw = creds
+            print(f"using 1Password item '{onepassword.DEFAULT_ITEM}' for credentials")
+
+    if user is None:
+        user = input("ChatPlayground email: ")
+    if pw is None:
+        pw = getpass.getpass("ChatPlayground password: ")
 
     storage_state = run_login_fn(user, pw)
     state.save_storage_state(sdir, storage_state)
