@@ -66,13 +66,13 @@ def save_threads(state_dir: Path, threads: dict) -> None:
     _atomic_write(_threads_path(state_dir), json.dumps(threads), stat.S_IRUSR | stat.S_IWUSR)
 
 
-def get_thread_url(state_dir: Path, model: str) -> Optional[str]:
+def get_thread_anchor(state_dir: Path, model: str) -> Optional[str]:
     return load_threads(state_dir).get(model)
 
 
-def set_thread_url(state_dir: Path, model: str, url: str) -> None:
+def set_thread_anchor(state_dir: Path, model: str, anchor: str) -> None:
     threads = load_threads(state_dir)
-    threads[model] = url
+    threads[model] = anchor
     save_threads(state_dir, threads)
 
 

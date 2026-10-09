@@ -1,6 +1,5 @@
 # Discovered 2026-10-09 by live inspection of https://web.chatplayground.ai/
-# (Clerk-hosted auth). Query/model-picker/chat selectors are not yet
-# discovered — they're added when the query path is implemented.
+# (Clerk-hosted auth; app UI built on React + Tailwind).
 SELECTORS = {
     # Matches both Clerk sub-flows: existing-user sign-in uses
     # name="identifier"; a never-seen-before email briefly shows
@@ -19,4 +18,27 @@ SELECTORS = {
     # Google". The same selector is used for both the email step and the
     # password step; Clerk re-renders the same button at each stage.
     "login_submit_button": 'role=button[name="Continue"]',
+    # Clicking a model's sidebar link always opens a *fresh* "New Chat"
+    # composer for that model (it never auto-resumes); {model} must be
+    # the exact label text shown in the sidebar, e.g. "Claude (Latest
+    # Model)", "Gemini (Latest Model)", "Kimi K".
+    "model_link": 'role=link[name="{model}"]',
+    "chat_input": 'textarea[placeholder="Use Shift+Enter to add new line"]',
+    "send_button": 'role=button[name="Send"]',
+    "stop_generating_button": 'role=button[name="Stop"]',
+    # Targets the rendered-answer content directly, scoped to rows whose
+    # role label is "ASSISTANT" (ChatPlayground has no stable per-message
+    # id). `.last` gives the most recent assistant message. Reasoning
+    # models (e.g. Kimi K) render a separate collapsible "Thought" block
+    # *before* this element within the same row — this selector excludes
+    # it, returning only the final answer either way.
+    "assistant_content": 'div.group.flex.w-full.flex-row:has(p:text-is("ASSISTANT")) [class*="streamdown-content"]',
+    # ChatPlayground has no per-conversation URL or id, so a thread is
+    # resumed by clicking its entry in the (per-model) Chat History list.
+    # Entries are titled from the first message's text, truncated to
+    # exactly 50 characters (confirmed empirically); {title} must be that
+    # 50-char-truncated string for an exact match.
+    "history_item": 'p.line-clamp-1:text-is("{title}")',
 }
+
+HISTORY_TITLE_MAX_CHARS = 50

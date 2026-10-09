@@ -42,27 +42,27 @@ def test_load_storage_state_round_trip(tmp_path):
 
 
 def test_threads_get_set_round_trip(tmp_path):
-    assert state.get_thread_url(tmp_path, "gpt-5") is None
-    state.set_thread_url(tmp_path, "gpt-5", "https://web.chatplayground.ai/chat/123")
-    assert state.get_thread_url(tmp_path, "gpt-5") == "https://web.chatplayground.ai/chat/123"
+    assert state.get_thread_anchor(tmp_path, "gpt-5") is None
+    state.set_thread_anchor(tmp_path, "gpt-5", "What is 2+2?")
+    assert state.get_thread_anchor(tmp_path, "gpt-5") == "What is 2+2?"
 
 
-def test_set_thread_url_preserves_other_models_entries(tmp_path):
-    state.set_thread_url(tmp_path, "gpt-5", "https://web.chatplayground.ai/chat/aaa")
-    state.set_thread_url(tmp_path, "claude-5", "https://web.chatplayground.ai/chat/bbb")
-    assert state.get_thread_url(tmp_path, "gpt-5") == "https://web.chatplayground.ai/chat/aaa"
-    assert state.get_thread_url(tmp_path, "claude-5") == "https://web.chatplayground.ai/chat/bbb"
+def test_set_thread_anchor_preserves_other_models_entries(tmp_path):
+    state.set_thread_anchor(tmp_path, "gpt-5", "first message to gpt-5")
+    state.set_thread_anchor(tmp_path, "claude-5", "first message to claude-5")
+    assert state.get_thread_anchor(tmp_path, "gpt-5") == "first message to gpt-5"
+    assert state.get_thread_anchor(tmp_path, "claude-5") == "first message to claude-5"
 
 
 def test_reset_thread_removes_existing(tmp_path):
-    state.set_thread_url(tmp_path, "gpt-5", "https://web.chatplayground.ai/chat/aaa")
+    state.set_thread_anchor(tmp_path, "gpt-5", "first message to gpt-5")
     state.reset_thread(tmp_path, "gpt-5")
-    assert state.get_thread_url(tmp_path, "gpt-5") is None
+    assert state.get_thread_anchor(tmp_path, "gpt-5") is None
 
 
 def test_reset_thread_noop_when_missing(tmp_path):
     state.reset_thread(tmp_path, "never-used-model")
-    assert state.get_thread_url(tmp_path, "never-used-model") is None
+    assert state.get_thread_anchor(tmp_path, "never-used-model") is None
 
 
 def test_load_threads_empty_dict_when_missing(tmp_path):
