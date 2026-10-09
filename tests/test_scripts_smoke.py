@@ -1,0 +1,15 @@
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def test_login_script_help():
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "login.py"), "--help"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "usage" in result.stdout.lower()
