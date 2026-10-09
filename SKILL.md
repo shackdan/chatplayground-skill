@@ -41,3 +41,9 @@ sometimes 10-60+ seconds). This is expected; do not treat it as hung.
 `./setup.sh` creates a local virtualenv and installs Playwright +
 Chromium. Then the user must run `! scripts/login.py` (in their own
 terminal) once before the first query.
+
+If the 1Password CLI (`op`) is installed and signed in, and a login item
+titled `automation` exists with `username`/`password` fields, `login.py`
+uses it automatically and skips the interactive prompt — no behavior
+change for Claude either way, since this still only ever runs in the
+user's own terminal.
