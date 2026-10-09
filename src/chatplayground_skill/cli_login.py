@@ -33,7 +33,10 @@ def main(
         creds = get_1password_credentials()
         if creds is not None:
             user, pw = creds
-            print(f"using 1Password item '{onepassword.DEFAULT_ITEM}' for credentials")
+            print(
+                f"using 1Password item '{onepassword.DEFAULT_ITEM}' "
+                f"(vault '{onepassword.DEFAULT_VAULT}') for credentials"
+            )
 
     if user is None:
         user = input("ChatPlayground email: ")
