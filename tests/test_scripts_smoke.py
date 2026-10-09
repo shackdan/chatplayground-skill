@@ -27,3 +27,24 @@ def test_login_script_help_reexecs_into_venv_when_run_under_system_python():
     )
     assert result.returncode == 0
     assert "usage" in result.stdout.lower()
+
+
+def test_query_script_help():
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "query.py"), "--help"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "usage" in result.stdout.lower()
+
+
+def test_query_script_help_reexecs_into_venv_when_run_under_system_python():
+    system_python = "/usr/bin/python3" if Path("/usr/bin/python3").exists() else "python3"
+    result = subprocess.run(
+        [system_python, str(REPO_ROOT / "scripts" / "query.py"), "--help"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "usage" in result.stdout.lower()
